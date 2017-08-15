@@ -24,7 +24,7 @@ elseif mana <= 20
 endif
 if @ingump 0x38920abd 'You do not have enough'
   headmsg 'Geting more supplies!'
-  //restock inscribe mats for runebooks
+  //restock inscribe mats for recall/gate scrolls
   if counter 'cntr-9' < 100
     findtype 0xef3 'any' 'restock'
     pause 200
