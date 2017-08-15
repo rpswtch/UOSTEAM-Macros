@@ -1,0 +1,76 @@
+//Geting Storage and Dump Box, this macro is meant to be run in a house with secure storage!
+if not @findobject 'Restock'
+  headmsg 'Select Restock Storage'
+  promptalias 'Restock'
+endif
+if not @findobject 'dumpbox'
+  headmsg 'Select Dump Box'
+  promptalias 'dumpbox'
+endif
+//making gate scrolls
+if mana > 39
+  findtype 0xfbf 'any' 'backpack'
+  useobject 'found'
+  waitforgump 0x38920abd 2000
+  replygump 0x38920abd 43
+  waitforgump 0x38920abd 2000
+  replygump 0x38920abd 23
+  waitforgump 0x38920abd 2000
+elseif mana <= 39
+  pause 250
+  useskill 'meditation'
+  while mana < maxmana
+  endwhile
+endif
+if @ingump 0x38920abd 'You do not have enough'
+  headmsg 'Geting more supplies!'
+  //restock inscribe mats for gates/recalls
+  if counter 'cntr-9' < 100
+    findtype 0xef3 'any' 'restock'
+    pause 200
+    moveitem 'found' 'backpack' 0 0 0 400
+    unsetalias 'found'
+    pause 600
+  endif
+  if counter 'cntr' < 100
+    findtype 0xf7a 'any' 'restock'
+    pause 200
+    moveitem 'found' 'backpack' 0 0 0 200
+    pause 200
+    unsetalias 'found'
+    pause 600
+  endif
+  if counter 'cntr-2' < 100
+    findtype 0xf86 'any' 'restock'
+    pause 200
+    moveitem 'found' 'backpack' 0 0 0 200
+    pause 200
+    unsetalias 'found'
+    pause 600
+  endif
+  if counter 'cntr-3' < 100
+    findtype 0xf7b 'any' 'restock'
+    pause 200
+    moveitem 'found' 'backpack' 0 0 0 200
+    pause 200
+    unsetalias 'found'
+    pause 600
+  endif
+  if counter 'cntr-4' < 100
+    findtype 0xf8c 'any' 'restock'
+    pause 200
+    moveitem 'found' 'backpack' 0 0 0 200
+    pause 200
+    unsetalias 'found'
+    pause 600
+  endif
+endif
+//Checking for overweight and dumping scrolls, designed for 100 str char
+if weight > 300
+  //this is the graphic for recalls
+  findtype 0x1f60 'any' 'backpack'
+  pause 200
+  moveitem 'found' 'dumpbox'
+  unsetalias 'found'
+  pause 600
+endif
