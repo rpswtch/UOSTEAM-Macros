@@ -9,15 +9,7 @@ if counttype '0x1f14' 'any' 'backpack' == 0
 endif
 if counttype '0xef3' 'any' 'backpack' < 8
   headmsg 'Need more Blank Scrolls!'
-endif
-//Set aliases for storage/beetle
-if not @findobject 'beetle'
-  headmsg 'Select beetle'
-  promptalias 'beetle1'
-endif
-if not @findobject 'trashcan'
-  headmsg 'Select Trash Can'
-  promptalias 'trash can'
+  stop
 endif
 //Make Runebooks
 usetype '0xfbf' 'any' 'backpack' '1'
@@ -36,22 +28,22 @@ if ingump 0x554b87f3 '100'
   replygump 0x554b87f3 0
   pause 100
   //THIS IS YOUR BEETLE
-  moveitem 'found' 'beetle1'
+  moveitem 'found' 0xb5a7
   unsetalias 'found'
   pause 600
-  endif
+endif
 if ingump 0x554b87f3 '10'
   replygump 0x554b87f3 0
   pause 100
   //TRASH THE 10S
-  moveitem 'found' 'trashcan'
+  moveitem 'found' 0x4007b816
   unsetalias 'found'
   pause 600
 else
   replygump 0x554b87f3 0
   pause 100
   //DROP OTHERS IN BEETLE
-  moveitem 'found' 'beetle1'
+  moveitem 'found' 0xb5a7
   unsetalias 'found'
   pause 600
 endif
