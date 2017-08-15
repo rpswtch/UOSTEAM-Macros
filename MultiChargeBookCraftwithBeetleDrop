@@ -1,0 +1,57 @@
+//check for resources
+if counttype '0x1f4c' 'any' 'backpack' == 0
+  headmsg 'Need More Recall Scrolls!'
+  stop
+endif
+if counttype '0x1f14' 'any' 'backpack' == 0
+  headmsg 'Need More Blank Runes!'
+  stop
+endif
+if counttype '0xef3' 'any' 'backpack' < 8
+  headmsg 'Need more Blank Scrolls!'
+endif
+//Set aliases for storage/beetle
+if not @findobject 'beetle'
+  headmsg 'Select beetle'
+  promptalias 'beetle1'
+endif
+if not @findobject 'trashcan'
+  headmsg 'Select Trash Can'
+  promptalias 'trash can'
+endif
+//Make Runebooks
+usetype '0xfbf' 'any' 'backpack' '1'
+waitforgump 0x38920abd 5000
+replygump 0x38920abd 57
+waitforgump 0x38920abd 5000
+replygump 0x38920abd 2
+waitforgump 0x38920abd 5000
+pause 50
+//BANK ALL 10CHG RUNEBOOKS THIS WILL THROW THEM OUT. DROP YOUR MAIN RUNEBOOK IN BEETLE BEFORE STARTING
+findtype 0x22c5 'any' 'backpack'
+useobject 'found'
+pause 500
+//CHECK FOR 100 FIRST
+if ingump 0x554b87f3 '100'
+  replygump 0x554b87f3 0
+  pause 100
+  //THIS IS YOUR BEETLE
+  moveitem 'found' 'beetle1'
+  unsetalias 'found'
+  pause 600
+  endif
+if ingump 0x554b87f3 '10'
+  replygump 0x554b87f3 0
+  pause 100
+  //TRASH THE 10S
+  moveitem 'found' 'trashcan'
+  unsetalias 'found'
+  pause 600
+else
+  replygump 0x554b87f3 0
+  pause 100
+  //DROP OTHERS IN BEETLE
+  moveitem 'found' 'beetle1'
+  unsetalias 'found'
+  pause 600
+endif
