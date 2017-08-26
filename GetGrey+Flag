@@ -1,0 +1,20 @@
+getenemy 'gray''criminal''closest'
+if @findobject 'enemy'
+  autotargetobject! 'enemy'
+  if criminal 'enemy'
+    msg 'All Guard Me'
+    attack! 'enemy'
+    target! 'enemy'
+    @clearusequeue
+    @cancelautotarget
+    stop
+  endif
+  if gray 'enemy'
+    msg 'All Guard Me'
+    attack! 'enemy'
+    target! 'enemy'
+    @clearusequeue
+    @cancelautotarget
+    stop
+  endif
+endif
