@@ -1,0 +1,9 @@
+if not findalias 'Escape Book'
+  headmsg 'Select Escape Book'
+  promptalias 'Escape Book'
+endif
+msg 'all follow me'
+useobject 'Escape Book'
+waitforgump 0x554b87f3 5000
+replygump 0x554b87f3 2
+pause 1500
