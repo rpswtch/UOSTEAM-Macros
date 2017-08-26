@@ -1,0 +1,25 @@
+if not findalias 'pet'
+  promptalias 'pet'
+endif
+if not inrange 'pet' 1
+  headmsg 'Get closer.'
+  unsetalias 'pet'
+  stop
+endif
+if diffhits 'pet' <= 0
+  headmsg 'Pet full health.'
+  unsetalias 'pet'
+  stop
+endif
+while diffhits 'pet' >= 1
+  if @findtype 0xe21
+    @useobject 'found'
+  else
+    headmsg 'out of bandages'
+    stop
+  endif
+  waitfortarget 1000
+  pause 300
+  target! 'pet'
+  pause 5500
+endwhile
