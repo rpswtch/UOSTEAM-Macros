@@ -20,30 +20,44 @@ replygump 0x38920abd 2
 waitforgump 0x38920abd 5000
 pause 50
 //BANK ALL 10CHG RUNEBOOKS THIS WILL THROW THEM OUT. DROP YOUR MAIN RUNEBOOK IN BEETLE BEFORE STARTING
-findtype 0x22c5 'any' 'backpack'
-useobject 'found'
-pause 500
-//CHECK FOR 100 FIRST
-if ingump 0x554b87f3 '100'
-  replygump 0x554b87f3 0
-  pause 100
-  //THIS IS YOUR BEETLE
-  moveitem 'found' 0xb5a7
-  unsetalias 'found'
-  pause 600
-endif
-if ingump 0x554b87f3 '10'
-  replygump 0x554b87f3 0
-  pause 100
-  //TRASH THE 10S
-  moveitem 'found' 0x4007b816
-  unsetalias 'found'
-  pause 600
-else
-  replygump 0x554b87f3 0
-  pause 100
-  //DROP OTHERS IN BEETLE
-  moveitem 'found' 0xb5a7
-  unsetalias 'found'
-  pause 600
-endif
+while findtype 0x22c5 'any' 'backpack'
+  useobject 'found'
+  pause 500
+  //CHECK FOR 100 FIRST
+  if ingump 0x554b87f3 '100'
+    replygump 0x554b87f3 0
+    pause 300
+    sysmsg '* * * * ---> ITS A HUNDY! <--- * * * *' 53
+    useobject 0x86598
+    pause 1000
+    waitforcontext 0xfc046 9 15000
+    pause 600
+    moveitem 'found' 0x42120357 80 114 0
+    unsetalias 'found'
+    pause 1000
+    useobject 0xfc046
+    clearjournal
+  endif
+  if ingump 0x554b87f3 '10'
+    replygump 0x554b87f3 0
+    pause 100
+    //TRASH THE 10S
+    moveitem 'found' 0x4007b816
+    unsetalias 'found'
+    pause 600
+  else
+    replygump 0x554b87f3 0
+    pause 300
+    sysmsg '* * * * ---> Multi charge book! <--- * * * *' 53
+    useobject 0x86598
+    pause 1000
+    waitforcontext 0xfc046 9 15000
+    pause 600
+    moveitem 'found' 0x42120357 80 114 0
+    unsetalias 'found'
+    pause 1000
+    useobject 0xfc046
+    clearjournal
+    //DROP OTHERS IN BEETLE
+  endif
+endwhile
