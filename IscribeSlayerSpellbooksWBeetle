@@ -1,0 +1,26 @@
+usetype 0xfbf
+waitforgump 0x38920abd 5000
+replygump 0x38920abd 57
+waitforgump 0x38920abd 5000
+replygump 0x38920abd 16
+waitforgump 0x38920abd 5000
+pause 500
+if @injournal 'slayer' 'system'
+  sysmsg '* * * * ---> Slayer Book! <--- * * * *' 53
+  msg 'guards'
+  @findtype 0xefa 'any' 'backpack'
+  useobject 0x86598
+  pause 1000
+  waitforcontext 0xfc046 9 15000
+  pause 500
+  moveitem 'found' 0x42120357 80 114 0
+  pause 1000
+  msg 'guards'
+  useobject 0xfc046
+  clearjournal
+endif
+pause 1000
+if @findtype 0xefa 'any' 'backpack'
+  moveitem 'found' 0x4007b816
+  pause 600
+endif
