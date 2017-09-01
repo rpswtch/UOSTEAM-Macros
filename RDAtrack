@@ -1,0 +1,384 @@
+///////////////////////////////////////////////////////////////////////////////
+//RDA Tracker v1.110
+//Author: Genocide Pete
+//
+//Requirements:
+//1. "Limit Target Range" under the Options > Combat tab MUST be disabled.
+//2. A rune that leads to a safe location with no surrounding red/crim NPCs.
+//3. Enough recall reagents to cover your book set.
+//4. 100 strength and 80+ int.
+//5. Heal reagents.
+//6. If a rune is blocked, do not remove it to remark until after the book set is completely checked.
+//
+//Notes:
+//1. A .wav file can be placed in your AssistUO/Sounds folder in order to hear an alert when your character is moderately wounded, the RDA is found, your recall reagents are low, your book set is complete, or the macro is interrupted.  This file must be named alert.wav.
+//2. Heal and cure potions will be used by the macro as needed if available.
+//3. Macro does not need to be stopped during saves.
+//4. When running the macro with a fresh set of books, a number will show in the lower left corner of the screen to verify how many RDA books the macro detected.
+//5. Your alert sound will play after each tracking attempt that produces a tracking gump to notify you of when you need to check for the RDA portal.  To disable this, either delete or comment out line 187.
+///////////////////////////////////////////////////////////////////////////////
+if not @findalias 'safeRune' or not @findobject 'safeRune'
+  headmsg '*Select a rune that leads to a safe location for when you are attacked*' 68
+  promptalias 'safeRune'
+endif
+clearjournal
+@createlist 'emptyBook'
+@clearlist 'emptyBook'
+@createlist 'newRunBool'
+@clearlist 'newRunBool'
+@createlist 'finalRuneBool'
+@clearlist 'finalRuneBool'
+if not listexists 'bookCount'
+  @createlist 'bookCount'
+endif
+@clearlist 'bookCount'
+pushlist 'bookCount' '10'
+pushlist 'bookCount' '9'
+pushlist 'bookCount' '8'
+pushlist 'bookCount' '7'
+pushlist 'bookCount' '6'
+pushlist 'bookCount' '5'
+pushlist 'bookCount' '4'
+pushlist 'bookCount' '3'
+pushlist 'bookCount' '2'
+pushlist 'bookCount' '1'
+createtimer 'actionCD'
+createtimer 'skillCD'
+createtimer 'alertCD'
+settimer 'alertCD' 1010
+if not listexists 'bookList' or not @findobject 'bookList[0]' 'any' 'backpack'
+  headmsg '*Counting RDA Books*' 68
+  @createlist 'bookList'
+  @clearlist 'bookList'
+  pushlist 'newRunBool' 'true'
+  if not @listexists 'runeList'
+    createlist 'runeList'
+    pushlist 'runeList' 4
+  endif
+  if not @listexists 'runeNumber'
+    createlist 'runeNumber'
+    pushlist 'runeNumber' 1
+  endif
+  clearjournal
+  while @findtype 0x22c5 'any' 'backpack'
+    clickobject 'found'
+    waitforjournal 'runebook' 1500
+    pause 500
+    if @injournal 'RDA' 'system'
+      pushlist 'bookList' 'found'
+      clearjournal
+    endif
+    //    pause 300
+    ignoreobject 'found'
+  endwhile
+  clearignorelist
+  while list 'bookList' < 'bookCount[0]'
+    poplist 'bookCount' 'front'
+  endwhile
+  if list 'bookCount' == 0
+    headmsg 'No books detected.' 50
+    messagebox 'Alert' 'No books detected.'
+    stop
+  endif
+  sysmsg 'Number of RDA books detected:' 69
+  if list 'bookList' <= 10
+    sysmsg 'bookCount[0]' 69
+  else
+    sysmsg '10+' 69
+  endif
+else
+  sysmsg 'Continuing from current runebook batch.' 69
+  useobject 'bookList[0]'
+  pause 600
+endif
+clickobject 'bookList[0]'
+useobject 'bookList[0]'
+waitforgump 0x554b87f3 3000
+replygump 0x554b87f3 'runeList[0]'
+while not @targetexists 'server'
+  cast 'recall'
+  pause 200
+endwhile
+pause 900
+@target 'bookList[0]'
+headmsg 'runeNumber[0]' 23
+poplist 'runeNumber' 'front'
+poplist 'runeList' 'front'
+while list 'bookList' > 0
+  if not listexists 'runeList' or list 'runeList' == 0
+    @createlist 'runeList'
+    if not @inlist 'newRunBool' 'true'
+      pushlist 'runeList' 4
+    endif
+    pushlist 'runeList' 10
+    pushlist 'runeList' 16
+    pushlist 'runeList' 22
+    pushlist 'runeList' 28
+    pushlist 'runeList' 34
+    pushlist 'runeList' 40
+    pushlist 'runeList' 46
+    pushlist 'runeList' 52
+    pushlist 'runeList' 58
+    pushlist 'runeList' 64
+    pushlist 'runeList' 70
+    pushlist 'runeList' 76
+    pushlist 'runeList' 82
+    pushlist 'runeList' 88
+    pushlist 'runeList' 94
+  endif
+  if not listexists 'runeNumber' or list 'runeNumber' == 0
+    @createlist 'runeNumber'
+    if not @inlist 'newRunBool' 'true'
+      pushlist 'runeNumber' 1
+    endif
+    pushlist 'runeNumber' 2
+    pushlist 'runeNumber' 3
+    pushlist 'runeNumber' 4
+    pushlist 'runeNumber' 5
+    pushlist 'runeNumber' 6
+    pushlist 'runeNumber' 7
+    pushlist 'runeNumber' 8
+    pushlist 'runeNumber' 9
+    pushlist 'runeNumber' 10
+    pushlist 'runeNumber' 11
+    pushlist 'runeNumber' 12
+    pushlist 'runeNumber' 13
+    pushlist 'runeNumber' 14
+    pushlist 'runeNumber' 15
+    pushlist 'runeNumber' 16
+    @clearlist 'newRunBool'
+  endif
+  while list 'runeList' > 0 or @inlist 'finalRuneBool' 'true'
+    if @targetexists 'server'
+      canceltarget
+    endif
+    //Stop macro if rune blocked.
+    if @injournal 'location is blocked' 'system'
+      headmsg '*Rune blocked. Please note which rune and book and remark later*' 50
+      messagebox 'Alert' 'Rune blocked.'
+      //    poplist 'runeNumber' 'front'
+      //     poplist 'runeList' 'front'
+      while not dead or dead
+        playsound 'alert.wav'
+        pause 900
+      endwhile
+    endif
+    //Track if previous rune change attempt was successful.
+    clearjournal
+    if not @inlist 'emptyBook' 'true'
+      useskill 'Tracking'
+      cast 'recall'
+      settimer 'skillCD' 0
+      waitforgump 0xb16e7d71 950
+      if not gumpexists 0xb16e7d71
+        headmsg '*Tracking failed.  Manually track then restart macro.*' 50
+        messagebox 'Alert' 'Tracking failed.  Manually track then restart macro.'
+        while not dead or dead
+          playsound 'alert.wav'
+          pause 900
+        endwhile
+      endif
+      replygump 0xb16e7d71 4
+      //cast 'recall'
+      waitforgump 0x3b378483 250
+    endif
+    if gumpexists 0x3b378483
+      playsound 'alert.wav'
+    endif
+    cast 'recall'
+    if list 'runeList' == 16
+      useobject 'bookList[0]'
+      pause 250
+    endif
+    while not @gumpexists 0x554b87f3
+      useobject 'bookList[0]'
+      pause 100
+    endwhile
+    if @injournal 'you must wait a few moments to use another skill' 'system' and not @injournal 'you see no evidence of people' 'system'
+      headmsg '*Tracking failed.  Manually track then restart macro.*' 50
+      messagebox 'Alert' 'Tracking failed.  Manually track then restart macro.'
+      while not dead or dead
+        playsound 'alert.wav'
+        pause 900
+      endwhile
+    endif
+    replygump 0x554b87f3 'runeList[0]'
+    pause 350
+    if @ingump '0x3b378483' 'a mysterious gate'
+      messagebox 'Alert' 'RDA found.'
+      for 3
+        headmsg 'RDA FOUND'
+        partymsg 'RDA FOUND'
+        guildmsg 'RDA FOUND'
+      endfor
+      while not dead or dead
+        playsound 'alert.wav'
+        pause 900
+      endwhile
+    endif
+    while not @targetexists 'server'
+      cast 'recall'
+      pause 200
+      if poisoned and @findtype 0xf07
+        if not @targetexists 'server'
+          usetype 0xf07
+          pause 600
+        endif
+      endif
+      //Initiate survival measures if heavy damage detected.
+      if hits < 70 and not @targetexists 'server'
+        if @findtype 0xf0c
+          usetype 0xf0c
+        endif
+        headmsg '*Heavy damage detected.  Restart macro when safe.*' 50
+        messagebox 'Alert' 'Heavy damage detected.'
+        while not hidden
+          if timer 'alertCD' >= 500
+            playsound 'alert.wav'
+            settimer 'alertCD' 0
+          endif
+          if poisoned and @findtype 0xf07
+            if timer 'actionCD' > 600
+              usetype 0xf07
+              settimer 'actionCD' 0
+            endif
+          endif
+          if hits < maxhits
+            cast 'heal'
+            target! 'self'
+            settimer 'alertCD' 100
+            pause 500
+          endif
+        endwhile
+      endif
+    endwhile
+    while timer 'skillCD' < 10350 or @inlist 'emptyBook' 'true'
+      if @getenemy 'criminal' 'murderer' and @findobject 'enemy' 'any' 'ground' 'any' 12
+        while not @targetexists 'server'
+          if hits < 70 and timer 'alertCD' > 1000
+            playsound 'alert.wav'
+            settimer 'alertCD' 0
+          endif
+          cast 'recall'
+          pause 200
+        endwhile
+        //possible save error
+        @target! 'safeRune'
+        pause 1500
+        if hits < 70 and mana >= 11
+          while not @targetexists 'server'
+            cast 'greater heal'
+          endwhile
+          target! 'self
+        endif
+        if mana >= 50
+          while not @targetexists 'server'
+            cast 'recall'
+            pause 200
+          endwhile
+          pause 900
+        else
+          while timer 'skillCD' < 10350
+          endwhile
+          if mana < 50
+            useskill 'meditation'
+            pause 10350
+            while mana < 50
+            endwhile
+          endif
+        endif
+      endif
+      if timer 'skillCD' > 4000 and @ingump '0x3b378483' 'a mysterious gate'
+        messagebox 'Alert' 'RDA found.'
+        for 3
+          headmsg 'RDA FOUND'
+          partymsg 'RDA FOUND'
+          guildmsg 'RDA FOUND'
+        endfor
+        while not dead or dead
+          playsound 'alert.wav'
+          pause 900
+        endwhile
+      endif
+      if timer 'skillCD' > 5000
+        if not @injournal 'new default location set' 'system' and not @gumpexists 0x554b87f3
+          clearjournal
+          @clearlist 'runeList'
+          @clearlist 'runeNumber'
+          pushlist 'emptyBook' 'true'
+          pause 300
+          break
+        else
+          @clearlist 'emptyBook'
+        endif
+      endif
+      if hits < 70 and timer 'alertCD' > 1000
+        playsound 'alert.wav'
+        settimer 'alertCD' 0
+      endif
+    endwhile
+    if @inlist 'emptyBook' 'true' or @inlist 'finalRuneBool' 'true'
+      @clearlist 'finalRuneBool'
+      break
+    endif
+    //check recall reagent count.  Use lists later.
+    if counttype 0xf7b 'any' 'backpack' < 3 or counttype 0xf86 'any' 'backpack' < 3
+      sysmsg 'Recall reagents low.' 50
+      messagebox 'Alert' 'Recall reagents low.'
+      while not dead or dead
+        canceltarget
+        playsound 'alert.wav'
+        pause 900
+      endwhile
+    elseif counttype 0xf7a 'any' 'backpack' < 3
+      sysmsg 'Recall reagents low.' 50
+      messagebox 'Alert' 'Recall reagents low.'
+      while not dead or dead
+        canceltarget
+        playsound 'alert.wav'
+        pause 900
+      endwhile
+    endif
+    if not @targetexists 'server'
+      while not @targetexists 'server'
+        cast 'recall'
+        pause 200
+      endwhile
+      pause 900
+    endif
+    if @injournal 'the world is saving' 'system' and not @injournal 'world save complete' 'system'
+      while not @injournal 'world save complete' 'system'
+      endwhile
+    endif
+    if not @targetexists 'server'
+      while not @targetexists 'server'
+        cast 'recall'
+        pause 200
+      endwhile
+      pause 900
+    endif
+    clearjournal
+    if not @inlist 'emptyBook' 'true'
+      clickobject 'bookList[0]'
+      headmsg 'runeNumber[0]' 23
+      @target 'bookList[0]'
+      poplist 'runeNumber' front
+      poplist 'runeList' front
+      if list 'runeNumber' == 0 and list 'bookList' == 1
+        pushlist 'finalRuneBool' 'true'
+      endif
+      pause 100
+    endif
+  endwhile
+  @removelist 'runeList'
+  @removelist 'runeNumber'
+  @poplist 'bookList' front
+endwhile
+headmsg '*No RDAs found. Please return your books.*' 50
+messagebox 'Alert' "No RDA found."
+@removelist 'bookList'
+@removelist 'runeNumber'
+while not dead or dead
+  playsound 'alert.wav'
+  pause 900
+endwhile
