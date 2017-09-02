@@ -1,0 +1,15 @@
+if not findalias 'targetgm'
+  headmsg 'Select target'
+  promptalias 'targetgm'
+endif
+if mana > 40
+  cast 'mana vampire'
+  waitingfortarget 2000
+  target 'targetgm'
+  pause 300
+else if mana < 40
+  useskill 'meditation'
+  while mana < maxmana
+    pause 50
+  endwhile
+endif
