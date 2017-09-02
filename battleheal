@@ -1,0 +1,9 @@
+while hits < maxhits
+  clearjournal
+  usetype 0xe21 'any' 'backpack'
+  waitingfortarget 2000
+  target 'self'
+  while not injournal 'finish' 'system'
+    pause 500
+  endwhile
+endwhile
