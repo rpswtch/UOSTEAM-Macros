@@ -22,18 +22,18 @@ pause 50
 //BANK ALL 10CHG RUNEBOOKS THIS WILL THROW THEM OUT. DROP YOUR MAIN RUNEBOOK IN BEETLE BEFORE STARTING
 while findtype 0x22c5 'any' 'backpack'
   useobject 'found'
-  pause 500
+  pause 600
   //CHECK FOR 100 FIRST
   if ingump 0x554b87f3 '100'
     replygump 0x554b87f3 0
-    pause 300
+    pause 500
     sysmsg '* * * * ---> ITS A HUNDY! <--- * * * ' 53
     useobject 0x4fe3a
     pause 1000
-    waitforcontext 0xfc046 9 15000
+    waitforcontext 0x2714a 9 15000
     msg 'guards'
-    pause 600
-    moveitem 'found'  0x2714a 65535 65535 0
+    pause 1000
+    moveitem 'found' 0x40547947 69 65 0
     unsetalias 'found'
     pause 1000
     useobject 0x2714a
@@ -42,21 +42,21 @@ while findtype 0x22c5 'any' 'backpack'
   endif
   if ingump 0x554b87f3 '10'
     replygump 0x554b87f3 0
-    pause 100
+    pause 300
     //TRASH THE 10S
     moveitem 'found' 0x4007b816
     unsetalias 'found'
     pause 600
   else
     replygump 0x554b87f3 0
-    pause 300
+    pause 500
     sysmsg ' * * * ---> Multi charge book! <--- * * * *' 53
     useobject 0x4fe3a
     pause 1000
-    waitforcontext 0xfc046 9 15000
+    waitforcontext 0x2714a 9 15000
      msg 'guards'
-    pause 600
-    moveitem 'found'  0x2714a 65535 65535 0
+    pause 1000
+    moveitem 'found' 0x40547947 69 65 0
     unsetalias 'found'
     pause 1000
     useobject 0x2714a
