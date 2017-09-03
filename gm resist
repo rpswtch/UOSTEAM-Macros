@@ -1,0 +1,14 @@
+if not @findobject 'target1'
+  promptalias 'target1'
+endif
+if mana > 39
+  cast 'mana vampire'
+  waitingfortarget 2000
+  target 'target1'
+  pause 300
+elseif mana < 40
+  useskill 'meditation'
+  while mana < maxmana
+    pause 50
+  endwhile
+endif
