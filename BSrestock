@@ -42,8 +42,9 @@ if skill 'Blacksmithy' < 52
   replygump 0x38920abd 30
   waitforgump 0x38920abd 15000
   pause 300
-  if @ingump 'any' 'You do not have'
-    pause 200
+  if @ingump 0x38920abd 'You do not have'
+    pause 500
+    unsetalias 'found'
     headmsg 'getting ingots'
     findtype 0x1bf2 'any' 'ingotbox'
     pause 1000
@@ -69,8 +70,9 @@ elseif skill 'Blacksmithy' < 60
   replygump 0x38920abd 23
   waitforgump 0x38920abd 15000
   pause 300
-  if @ingump 'any' 'You do not have'
-    pause 200
+  if @ingump 0x38920abd 'You do not have'
+    pause 500
+    unsetalias 'found'
     headmsg 'getting ingots'
     findtype 0x1bf2 'any' 'ingotbox'
     pause 1000
@@ -96,8 +98,9 @@ elseif skill 'Blacksmithy' < 95
   replygump 0x38920abd 16
   waitforgump 0x38920abd 15000
   pause 300
-  if @ingump 'any' 'You do not have'
-    pause 200
+  if @ingump 0x38920abd 'You do not have'
+    pause 500
+    unsetalias 'found'
     headmsg 'getting ingots'
     findtype 0x1bf2 'any' 'ingotbox'
     pause 1000
@@ -123,8 +126,9 @@ elseif skill 'Blacksmithy' < 100
   replygump 0x38920abd 16
   waitforgump 0x38920abd 15000
   pause 300
-  if @ingump 'any' 'You do not have'
-    pause 200
+  if @ingump 0x38920abd 'You do not have'
+    pause 500
+    unsetalias 'found'
     headmsg 'getting ingots'
     findtype 0x1bf2 'any' 'ingotbox'
     pause 1000
