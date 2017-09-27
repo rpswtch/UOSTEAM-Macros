@@ -1,0 +1,167 @@
+
+
+//Author: LevelZero
+
+//Description:
+
+//Uses Smith Hammer to train blacksmithy to 100
+
+//Smelter included
+
+if not @findobject 'hammerbox'
+headmsg 'select hammer storage'
+promptalias 'hammerbox'
+endif
+
+if not @findobject 'ingotbox'
+headmsg 'select ingot storage'
+promptalias 'ingotbox'
+endif
+
+if @findtype '0x13e3' '0' 'backpack' 'any' '2'
+
+  @setalias 'Hammer' 'found'
+
+  @unsetalias 'found'
+
+else
+
+findtype 0x13e3 'any' 'hammerbox'
+pause 200
+moveitem 'found' 'backpack' 0 0 0 1
+pause 1000
+unsetalias 'found'
+
+endif
+
+if skill 'Blacksmithy' < 47
+
+  //Scimitar
+useobject 'Hammer'
+pause 300
+  replygump 0x38920abd 43
+
+  waitforgump 0x38920abd 15000
+
+  replygump 0x38920abd 44
+
+  waitforgump 0x38920abd 15000
+  
+  if ingump 'any' 'do not have'
+  movetype INGOTS 'ingotbox' 'backpack' 0 0 0 500
+
+if weight > 300
+  while findtype '0x13b6' 'any' 'backpack' 'any' '2'
+
+    replygump 0x38920abd 14
+
+    waitfortarget 15000
+
+    target! 'found'
+
+    waitforgump 0x38920abd 15000
+
+  endwhile
+  endif
+
+elseif skill 'Blacksmithy' < 52
+
+  //Kryss
+
+  replygump 0x38920abd 43
+
+  waitforgump 0x38920abd 15000
+
+  replygump 0x38920abd 30
+
+  waitforgump 0x38920abd 15000
+
+  while findtype '0x1401' 'any' 'backpack' 'any' '2'
+
+    replygump 0x38920abd 14
+
+    waitfortarget 15000
+
+    target! 'found'
+
+    waitforgump 0x38920abd 15000
+
+  endwhile
+
+elseif skill 'Blacksmithy' < 60
+
+  //Katana
+
+  replygump 0x38920abd 43
+
+  waitforgump 0x38920abd 15000
+
+  replygump 0x38920abd 23
+
+  waitforgump 0x38920abd 15000
+
+  while findtype '0x13ff' 'any' 'backpack' 'any' '2'
+
+    replygump 0x38920abd 14
+
+    waitfortarget 15000
+
+    target! 'found'
+
+    waitforgump 0x38920abd 15000
+
+  endwhile
+
+elseif skill 'Blacksmithy' < 95
+
+  //Short Spear
+
+  replygump 0x38920abd 57
+
+  waitforgump 0x38920abd 15000
+
+  replygump 0x38920abd 16
+
+  waitforgump 0x38920abd 15000
+
+  while findtype '0x1403' 'any' 'backpack' 'any' '2'
+
+    replygump 0x38920abd 14
+
+    waitfortarget 15000
+
+    target! 'found'
+
+    waitforgump 0x38920abd 15000
+
+  endwhile
+
+elseif skill 'Blacksmithy' < 100
+
+  //Plate Gorget
+
+  replygump 0x38920abd 22
+
+  waitforgump 0x38920abd 15000
+
+  replygump 0x38920abd 16
+
+  waitforgump 0x38920abd 15000
+
+  while findtype '0x1413' 'any' 'backpack' 'any' '2'
+
+    replygump 0x38920abd 14
+
+    waitfortarget 15000
+
+    target! 'found'
+
+    waitforgump 0x38920abd 15000
+
+  endwhile
+
+else
+
+  headmsg '100 Blacksmith!!!'
+stop
+endif
